@@ -1,0 +1,28 @@
+﻿From: https://github.com/AzuraMeta/ALF/blob/master/regex_homework.txt
+
+/(([02468][048]|[13579][26])([02468][048]|[13579][26])-((0[13578]|1[02])-(0[1-9]|[12]\d|3[01])|(0[469]|11)-(0[1-9]|[12]\d|30)|(02)-(0[1-9]|1\d|2[0-9]))|(\d{4})-((0[13578]|1[02])-(0[1-9]|[12]\d|3[01])|(0[469]|11)-(0[1-9]|[12]\d|30)|(02)-(0[1-9]|1\d|2[0-8])))T([0-1]\d|2[0-3]):([0-5]\d):([0-5]\d)Z/g
+
+Tested on: 
+1994-10-05T13:15:30Z accurate, reference1  
+1994-08-05T13:15:30Z accurate, reference2 
+2012-02-29T13:15:30Z accurate, leap year reference 
+0194-11-05T13:15:30Z accurate? discussion - year can go from 0000 up to 9999 and it would still be correct 
+
+7a95-11-05T13:15:30Z inaccurate (year) 
+1994-00-05T13:15:30Z inaccurate, (month 00) 
+1994-81-05T13:15:30Z inaccurate (month over 12)   
+1994-11-44T13:15:30Z inaccurate (day)  
+1994-11-05A13:15:30Z inaccurate (A instead of middle T)  
+1994-11-05T31:15:30Z inaccurate (hours)  
+1994-11-05T13:99:30Z inaccurate (mins)  
+1994-11-05T13:20:99Z inaccurate (secs)  
+1994-11-05T13:15:30a inaccurate (last char is not Z)  
+1994:11-05T13:15:30Z inaccurate (no dash 1)  
+1994-11:05T13:15:30Z inaccurate (no dash 2) 
+1994-81-05T13-15:30Z inaccurate (no : 1)
+1994-81-05T13:15-30Z inaccurate (no : 2)
+2013-02-29T13:15:30Z inaccurate (29.02 in non-leap year)   
+2012-02-30T13:15:30Z inaccurate (February over 29)  
+
+Tried with 
+([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)? From stackoverflow, but it didn’t differentiate between leap and non-leap yrs
