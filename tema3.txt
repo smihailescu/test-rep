@@ -1,61 +1,62 @@
-//from https://github.com/night0094/ALF-2014/blob/master/Devoir%203/PEG.js%20script.txt
-//will upload my version instead as soon as it's finished
+{
+  function makeInteger(int) {
+    return parseInt(int.join(""), 10);
+  }
 
-/*
- * Gheorghiu Ion-Alexandru
- * Groupe 1231 F
- * working parser for +,-,*,/,^ operations
- */
+  function makeString(string) {
+    return string.join("");
+  }
+
+}
+
+//addition, substraction, multiplication, division, exponential for bo$$
 
 start
-  = (firstAction)*
+  = weCommence
 
-//separarea $$ de expresia noastra 
-firstAction
-   =left:secondAction " " right:pct {return left}
+weCommence
+=left:parseBoss " " right:dollarSign {return left;}
 
-// separarea variabilei de expresia atribuita
-secondAction
-   = left:string " = " right:additive { return left+' are valoarea de '+right }
+parseBoss
+= left:init " = " right:additive {return right;}
 
-// funtia de suma
+// starting to build on the peg.js
+//+
 additive
-  = left:subtraction "+" right:additive { return left + right; }
-  / subtraction
+  = left:subtractive "+" right:additive { return left + right; }
+  / subtractive
 
-//fucntia de scadere
-subtraction
-  = left:exponential "-" right:subtraction { return left - right; }
-  / exponential
-
-// functia la putere
-exponential
-  = left:division "^" right:exponential {return Math.pow(left,right)}
-  / division
-
-// functia de raport
-division 
-  = left:multiplicative "/" right:division {return left/right}
+//-
+subtractive
+  = left:multiplicative "-" right:subtractive { return left - right; }
   / multiplicative
 
-// functia de inmultire
+// *
 multiplicative
-  = left:primary "*" right:multiplicative { return left * right; }
+  = left:divisive "*" right:multiplicative { return left * right; }
+  / divisive
+
+// /
+divisive
+  = left:pow "/" right:divisive {return left/right}
+  / pow
+
+//^
+pow
+  = left:primary "^" right:pow {return Math.pow(left,right)}
   / primary
 
-//prioritizarea chestiilor in paranteza
+//order in paranthesis from peg.js
 primary
   = integer
-  / "(" additive:additive ")" { return additive; }
+  / "(" additive:additive ")" {return additive;}
 
-//valorile intregi
 integer "integer"
-  = (digits:[0-9]+) { return parseInt(digits.join(""), 10); }
+  = digits:[0-9]+ {return makeInteger(digits);}
 
-//valorile string
-string "string"
-  = variable:([a-zA-Z]+) { return variable.join(""); }
+//we use + and not {4} because the documentation says it doesn't recognize a regex of this type
+init "init"
+= initialize:[a-zA-Z]+ {return makeString(initialize);}
 
-//semnul de $$
-pct
-  = final:[$][$]"\n" { return final }
+dollarSign
+= boss:[$][$]"\n"{ return boss }
