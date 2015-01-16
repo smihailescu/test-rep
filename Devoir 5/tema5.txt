@@ -83,7 +83,7 @@ void CompilationUnit() :
 }
 {
    (
-       VarDeclaration() "$$"
+       VarDeclaration() "$"
      |
        Statement()
    )*
@@ -284,7 +284,7 @@ void BooleanLiteral() #void :
 void Statement() #void :
 {}
 {
-  "$$"
+  "$"
 |
   LOOKAHEAD(2)
   LabeledStatement()
@@ -322,7 +322,7 @@ void StatementExpression() :
  */
 {}
 {
-  Assignment() "$$"
+  Assignment() "$"
 }
 
 /** An if statement. */
@@ -373,7 +373,7 @@ TOKEN : /* IDENTIFIERS */
 {
   < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
 |
-  <IFTERMINATOR: "$$ $$" >
+  <IFTERMINATOR: "$$" >
 |
   < #LETTER: [ "a"-"z", "A"-"Z" ] >
 |
