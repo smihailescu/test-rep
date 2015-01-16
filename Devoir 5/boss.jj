@@ -1,0 +1,109 @@
+PARSER_BEGIN(Beah)
+//modifying code from https://github.com/iuliastanica/Alf_devoirs/blob/master/devoir%204/Beah.jj
+public class Boss {
+	
+    public static void main(String[] args) throws ParseException, Exception
+	{
+	try {
+        Boss start = new Boss(System.in);
+		while (true)
+			{ start.isboss();
+			System.out.println("you are a bo$$"); System.exit(-1);}
+		}
+		
+	catch(ParseException e)
+		{
+			System.out.println(e.getMessage());
+			System.out.println("\t you are not a bo$$"); }
+		}
+		
+    }
+
+
+PARSER_END(Boss)
+
+SKIP:  { " "|"\t" | "\r"  }
+                
+TOKEN: { <#NUMBER: (("-")? <INT>) | (("-")? <INT> "." <INT>)| <ZERO> >}
+TOKEN: { <VARIABLE: (<ID>)+ >}
+TOKEN: { <TERM: (<ID>)+|<NUMBER> >}
+TOKEN: {<#INT: (["0"-"9"])+ >}
+TOKEN: {<#ZERO: "0" >}
+TOKEN: {<#ID: ["a"-"z","A"-"Z"]> }
+TOKEN: {<TERMINATOR: "$">}
+TOKEN: {<EOP: "$$$">}
+TOKEN: {< EOL: ("\n")? >}
+TOKEN : 
+{ 
+	  <ASSIGN : "=">  
+	| <PLUS : "+" >  
+	| <MINUS:"-"> 
+	| <MULTIPLY:"*"> 
+	| <DIVIDE:"/"> 
+	| <POWER:"^">
+	
+}
+
+TOKEN:
+{
+	  <EQUAL: "==" > 
+	| <LESSEQUAL: "<=" > 
+	| <LESS: "<" > 
+	| <GREATEREQUAL: ">=" > 
+	| <GREATER: ">" > 
+	| <DIFFERENT: "!=" > 
+	
+}
+
+
+void Verif():
+{}
+{
+< VARIABLE >< ASSIGN >(<TERM>)(( <PLUS> | <MINUS> | <MULTIPLY> | <DIVIDE> | <POWER> )(<TERM>))?<TERMINATOR>
+}
+
+void isboss():
+
+{Token t=null;
+int i;
+int value=0;}
+{
+((< VARIABLE > < ASSIGN >
+t=<TERM>
+{i=Integer.parseInt(t.image); }
+{value=i; }
+(
+ <PLUS> 
+ t=<TERM>
+ {i=Integer.parseInt(t.image); }
+ {value+=i; }
+ 
+ |
+ <MINUS>
+ t=<TERM>
+ {i=Integer.parseInt(t.image); }
+ {value-=i; }
+ 
+ |
+ <MULTIPLY>
+ t=<TERM>
+ {i=Integer.parseInt(t.image); }
+ {value*=i; }
+
+ |
+ <DIVIDE>
+ t=<TERM>
+ {i=Integer.parseInt(t.image); }
+ {value/=i; }
+ 
+ |
+ <POWER>
+ t=<TERM>
+ {i=Integer.parseInt(t.image); }
+ {value^=i; }
+ 
+ )* <TERMINATOR> {System.out.println(value);} <EOL>)*)
+ (<EOL>)* 
+ <EOP>
+
+}
