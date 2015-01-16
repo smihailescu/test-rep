@@ -1,0 +1,62 @@
+{
+  function makeInteger(int) {
+    return parseInt(int.join(""), 10);
+  }
+
+  function makeString(string) {
+    return string.join("");
+  }
+
+}
+
+//addition, substraction, multiplication, division, exponential for bo$$
+
+start
+  = weCommence
+
+weCommence
+=left:parseBoss " " right:dollarSign {return left;}
+
+parseBoss
+= left:init " = " right:additive {return right;}
+
+// starting to build on the peg.js
+//+
+additive
+  = left:subtractive "+" right:additive { return left + right; }
+  / subtractive
+
+//-
+subtractive
+  = left:multiplicative "-" right:subtractive { return left - right; }
+  / multiplicative
+
+// *
+multiplicative
+  = left:divisive "*" right:multiplicative { return left * right; }
+  / divisive
+
+// /
+divisive
+  = left:pow "/" right:divisive {return left/right}
+  / pow
+
+//^
+pow
+  = left:primary "^" right:pow {return Math.pow(left,right)}
+  / primary
+
+//order in paranthesis from peg.js
+primary
+  = integer
+  / "(" additive:additive ")" {return additive;}
+
+integer "integer"
+  = digits:[0-9]+ {return makeInteger(digits);}
+
+//we use + and not {4} because the documentation says it doesn't recognize a regex of this type
+init "init"
+= initialize:[a-zA-Z]+ {return makeString(initialize);}
+
+dollarSign
+= boss:[$][$]"\n"{ return boss }
