@@ -1,5 +1,5 @@
-// Input to this machine: a binary number.
-// Output: that binary number plus one.
+// Input to this machine: two binary numbers
+// Output: the difference
 var addOneMachine = {};
 addOneMachine.stateTransition = {
     "zero": { //finds right edge of first number
